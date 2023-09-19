@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
+using Random = UnityEngine.Random;
 
 public class Enemey : MonoBehaviour
 {
@@ -58,5 +60,32 @@ public class Enemey : MonoBehaviour
         if(!isLive)
             return;
         _sprite.flipX = target.position.x < _rigidbody.position.x;
+    }
+    
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Bullet"))
+            return;
+        health -= collision.GetComponent<Bullet>().damage;
+
+        if (health > 0)
+        {
+            
+        }
+        else
+        {
+            Dead();
+        }
+    }
+
+    private void Dead()
+    {
+        gameObject.SetActive(false);
+        // var degree = Random.Range(0.00f, 6.28f);
+        // var posX = Mathf.Cos(degree);
+        // var posY = Mathf.Sin(degree);
+        //
+        // transform.position = GameManager.Instance.player.transform.position 
+        //                      + new Vector3(10f*posX, 10f*posY, 0);
     }
 }

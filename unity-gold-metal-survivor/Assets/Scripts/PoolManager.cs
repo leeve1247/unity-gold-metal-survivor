@@ -11,6 +11,7 @@ public class PoolManager : MonoBehaviour
     // .. 풀 담당을 하는 리스트
     List<GameObject>[] pools;
 
+    // Awake is called when the script instance is being loaded.
     private void Awake()
     {
         //Object Pooling
@@ -24,8 +25,8 @@ public class PoolManager : MonoBehaviour
         Debug.Log(pools.Length);
     }
 
-    //index 번째 풀안에 있는 오브젝트를 가져오는 것
-    public GameObject Get(int index)
+    //index 번째 풀안에 있는 오브젝트를 가져오는 함수
+    public GameObject get(int index)
     {
         GameObject select = null;
         // .... access to idle game object
@@ -33,9 +34,9 @@ public class PoolManager : MonoBehaviour
         {
             if (!item.activeSelf)
             {
-                select = null;
-                item.SetActive(true);;
-                break;
+                select = item;
+                item.SetActive(true);
+                return select;
             }
         }
 
@@ -44,7 +45,6 @@ public class PoolManager : MonoBehaviour
             select = Instantiate(prefebs[index], transform);
             pools[index].Add(select);
         }
-        
         return select;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -10,8 +11,6 @@ public class Spawner : MonoBehaviour
 
     public Transform[] spawnPoint;
     public SpawnData[] spawnDatas;
-
-    int _level; //시간에 따라 레벨변화
     
 
     private void Awake()
@@ -24,10 +23,10 @@ public class Spawner : MonoBehaviour
     void Update()
     {
         _timer += Time.deltaTime;
-        _level = Mathf.FloorToInt(GameManager.Instance.gameTime / 10f); //주어진 시간에 따라 맞춰서 레벨 상승 FloorToInt -> 소숫점 버리기
 
         // if (_timer > (_level == 0 ? 0.5f : 0.2f))
-        if (_timer > spawnDatas[_level].spawnTime)
+        
+        if (_timer > spawnDatas[GameManager.Instance.level].spawnTime)
         {
             _timer = 0;
             Spawn();
@@ -38,10 +37,9 @@ public class Spawner : MonoBehaviour
     private void Spawn()
     {
         // var enemy = GameManager.instance.pool.Get(_level);
-        var enemy = GameManager.Instance.poolManager.Get(0);
+        var enemy = GameManager.Instance.poolManager.get(0);
         enemy.transform.position = spawnPoint[Random.Range(1, spawnPoint.Length)].position;
-        enemy.GetComponent<Enemey>().Init(spawnDatas[_level]);
-        
+        enemy.GetComponent<Enemey>().Init(spawnDatas[GameManager.Instance.level]);
     }
 }
 
