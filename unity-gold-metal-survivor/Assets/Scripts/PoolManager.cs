@@ -22,7 +22,7 @@ public class PoolManager : MonoBehaviour
             pools[index] = new List<GameObject>();
         }
         
-        Debug.Log(pools.Length);
+        // Debug.Log(pools.Length);
     }
 
     //index 번째 풀안에 있는 오브젝트를 가져오는 함수

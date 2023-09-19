@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
 
         if (per > -1)
         {
-            Debug.Log(dir.magnitude);
+            // Debug.Log(dir.magnitude);
             _rigidbody2D.velocity = 60 * dir;
         }
     }

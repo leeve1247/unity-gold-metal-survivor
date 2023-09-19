@@ -9178,11 +9178,11 @@ MonoBehaviour:
   spawnDatas:
   - spawnTime: 0.7
     spriteType: 0
-    maxHealth: 20
+    maxHealth: 10
     speed: 1
   - spawnTime: 0.2
     spriteType: 1
-    maxHealth: 25
+    maxHealth: 10
     speed: 1
 --- !u!1 &963194225
 GameObject:
@@ -9852,9 +9852,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   prefabId: 2
-  damage: 3
+  damage: 30
   count: 0
-  speed: 0
+  speed: 1
 --- !u!1 &1575770457
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,6 +36,7 @@ public class Weapon : MonoBehaviour
                 timer += Time.deltaTime;
                 if (timer > speed)
                 {
+                    // Debug.Log("발사!");
                     timer = 0f;
                     Fire();
                 }
