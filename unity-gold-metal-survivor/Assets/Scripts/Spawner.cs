@@ -9,8 +9,10 @@ public class Spawner : MonoBehaviour
 {
 
     public Transform[] spawnPoint;
+    public SpawnData[] spawnDatas;
 
-    float timer;
+    int _level; //시간에 따라 레벨변화
+    
 
     private void Awake()
     {
@@ -18,21 +20,37 @@ public class Spawner : MonoBehaviour
     }
 
     // Update is called once per frame
+    float _timer; //Update 용 변수
     void Update()
     {
-        timer += Time.deltaTime;
+        _timer += Time.deltaTime;
+        _level = Mathf.FloorToInt(GameManager.Instance.gameTime / 10f); //주어진 시간에 따라 맞춰서 레벨 상승 FloorToInt -> 소숫점 버리기
 
-        if (timer > 0.2f)
+        // if (_timer > (_level == 0 ? 0.5f : 0.2f))
+        if (_timer > spawnDatas[_level].spawnTime)
         {
+            _timer = 0;
             Spawn();
-            timer = 0;
+            
         }
     }
 
     private void Spawn()
     {
-        var enemy = GameManager.instance.pool.Get(Random.Range(0, 2));
+        // var enemy = GameManager.instance.pool.Get(_level);
+        var enemy = GameManager.Instance.poolManager.Get(0);
         enemy.transform.position = spawnPoint[Random.Range(1, spawnPoint.Length)].position;
+        enemy.GetComponent<Enemey>().Init(spawnDatas[_level]);
         
     }
+}
+
+[System.Serializable] //직렬화가 된다.
+public class SpawnData
+{
+    public float spawnTime; //used in Spawner
+    
+    public int spriteType; //used in enemy
+    public int maxHealth;  //used in enemy
+    public float speed; //used in enemy
 }

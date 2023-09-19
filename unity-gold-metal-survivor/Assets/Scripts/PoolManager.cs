@@ -13,6 +13,7 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
+        //Object Pooling
         pools = new List<GameObject>[prefebs.Length];
 
         for (int index = 0; index < pools.Length; index++)
@@ -23,6 +24,7 @@ public class PoolManager : MonoBehaviour
         Debug.Log(pools.Length);
     }
 
+    //index 번째 풀안에 있는 오브젝트를 가져오는 것
     public GameObject Get(int index)
     {
         GameObject select = null;
