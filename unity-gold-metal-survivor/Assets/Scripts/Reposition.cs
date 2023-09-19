@@ -38,7 +38,6 @@ public class Reposition : MonoBehaviour
                 break;
             
             case "Enemy":
-                Debug.Log("아아아");
                 if (coll.enabled)
                 {
                     transform.Translate(

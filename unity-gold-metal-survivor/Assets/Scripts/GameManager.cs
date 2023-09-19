@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; //스태틱으로 선언된 변수는 인스펙터에서 감지되지 않음
+    public PoolManager pool;
     public Player player;
 
     void Awake()

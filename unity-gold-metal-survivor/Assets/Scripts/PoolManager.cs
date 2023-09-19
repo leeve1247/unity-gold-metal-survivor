@@ -22,4 +22,27 @@ public class PoolManager : MonoBehaviour
         
         Debug.Log(pools.Length);
     }
+
+    public GameObject Get(int index)
+    {
+        GameObject select = null;
+        // .... access to idle game object
+        foreach (var item in pools[index])
+        {
+            if (!item.activeSelf)
+            {
+                select = null;
+                item.SetActive(true);;
+                break;
+            }
+        }
+
+        if (!select)
+        {
+            select = Instantiate(prefebs[index], transform);
+            pools[index].Add(select);
+        }
+        
+        return select;
+    }
 }

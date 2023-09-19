@@ -21,7 +21,7 @@ public class Enemey : MonoBehaviour
         speed = 2.5f;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         target = GameManager.instance.player.GetComponent<Rigidbody2D>();
     }
