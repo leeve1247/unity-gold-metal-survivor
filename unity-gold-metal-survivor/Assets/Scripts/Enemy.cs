@@ -18,9 +18,11 @@ public class Enemey : MonoBehaviour
     bool isLive = true;
 
     Rigidbody2D _rigidbody;
+    private Collider2D _collider;
     Animator _anim;
     SpriteRenderer _sprite;
     WaitForFixedUpdate _wait;
+    private static readonly int Dead1 = Animator.StringToHash("Dead");
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class Enemey : MonoBehaviour
         _sprite = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
         _wait = new WaitForFixedUpdate();
+        _collider = GetComponent<Collider2D>();
     }
 
     // When Enemy Enabled and Active
@@ -36,6 +39,13 @@ public class Enemey : MonoBehaviour
         target = GameManager.Instance.player.GetComponent<Rigidbody2D>();
         isLive = true;
         health = maxHealth;
+        
+        //초기화 과정
+        isLive = true;
+        _collider.enabled = true;
+        _rigidbody.simulated = true;
+        _sprite.sortingOrder = 2; // 이걸 왜 1 로 내리는가?
+        _anim.SetBool("Dead", false);
     }
 
     public void Init(SpawnData spawnData)
@@ -67,7 +77,7 @@ public class Enemey : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Bullet"))
+        if (!collision.CompareTag("Bullet") || !isLive) //충돌이 연달아 일어났을 때를 방지하기 위함
             return;
         health -= collision.GetComponent<Bullet>().damage;
         StartCoroutine(KnockBack()); // 비동기 실행 함수
@@ -76,9 +86,16 @@ public class Enemey : MonoBehaviour
         {
             _anim.SetTrigger("Hit");
         }
-        else
+        else //으앙 쥬금
         {
-            Dead();
+            // Debug.Log("Triggered?");
+            isLive = false;
+            _collider.enabled = false;
+            _rigidbody.simulated = false;
+            _sprite.sortingOrder = 1; // 이걸 왜 1 로 내리는가?
+            _anim.SetBool("Dead", true);
+            GameManager.Instance.kill++;
+            GameManager.Instance.GetExp();
         }
     }
 

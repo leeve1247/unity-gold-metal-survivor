@@ -26,7 +26,7 @@ public class Spawner : MonoBehaviour
 
         // if (_timer > (_level == 0 ? 0.5f : 0.2f))
         
-        if (_timer > spawnDatas[GameManager.Instance.level].spawnTime)
+        if (_timer > spawnDatas[GameManager.Instance.MonsterLevel].spawnTime)
         {
             _timer = 0;
             Spawn();
@@ -39,7 +39,7 @@ public class Spawner : MonoBehaviour
         // var enemy = GameManager.instance.pool.Get(_level);
         var enemy = GameManager.Instance.poolManager.get(0);
         enemy.transform.position = spawnPoint[Random.Range(1, spawnPoint.Length)].position;
-        enemy.GetComponent<Enemey>().Init(spawnDatas[GameManager.Instance.level]);
+        enemy.GetComponent<Enemey>().Init(spawnDatas[GameManager.Instance.MonsterLevel]);
     }
 }
 
