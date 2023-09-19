@@ -1,10 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Reposition : MonoBehaviour
 {
+    private Collider2D coll;
+
+    private void Awake()
+    {
+        coll = GetComponent<Collider2D>();
+    }
+
     //On TriggerExit2D -> 그만 겹쳐졌을 때, 해제되는 것
     void OnTriggerExit2D(Collider2D collision)
     {
@@ -34,8 +38,16 @@ public class Reposition : MonoBehaviour
                 break;
             
             case "Enemy":
-                
+                Debug.Log("아아아");
+                if (coll.enabled)
+                {
+                    transform.Translate(
+                        playerDir * 20 + RandomRangeVector
+                    );
+                }
                 break;
         }
     }
+
+    private static Vector3 RandomRangeVector => new(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0f);
 }
