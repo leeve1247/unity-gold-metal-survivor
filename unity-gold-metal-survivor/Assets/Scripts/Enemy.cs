@@ -20,13 +20,14 @@ public class Enemey : MonoBehaviour
     Rigidbody2D _rigidbody;
     Animator _anim;
     SpriteRenderer _sprite;
+    WaitForFixedUpdate _wait;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _sprite = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
-        speed = 2.5f;
+        _wait = new WaitForFixedUpdate();
     }
 
     // When Enemy Enabled and Active
@@ -47,7 +48,9 @@ public class Enemey : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!isLive)
+        if(!isLive) // 0 은 base를 의미함 Hit 상태에서는 물리법칙을 잠시 멈춘다는 
+            return;
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
         Vector2 dirVec = target.position - _rigidbody.position;
         Vector2 nextVec = dirVec.normalized * (speed * Time.fixedDeltaTime);
@@ -67,15 +70,26 @@ public class Enemey : MonoBehaviour
         if (!collision.CompareTag("Bullet"))
             return;
         health -= collision.GetComponent<Bullet>().damage;
+        StartCoroutine(KnockBack()); // 비동기 실행 함수
 
         if (health > 0)
         {
-            
+            _anim.SetTrigger("Hit");
         }
         else
         {
             Dead();
         }
+    }
+
+    IEnumerator KnockBack()
+    {
+        // yield return null; // 1프레임을 쉬기 (오로지 비동기 용)
+        // yield return new WaitForSeconds(2f); // 2초 쉬기 (오로지 비동기 용)
+        yield return _wait; // 다음 하나의 물리 프레임까지 대기
+        Vector3 playerPos = GameManager.Instance.player.transform.position;
+        Vector3 dirVec = transform.position - playerPos;
+        _rigidbody.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
     }
 
     private void Dead()
