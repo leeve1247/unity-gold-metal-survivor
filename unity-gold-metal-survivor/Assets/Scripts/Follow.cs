@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class Follow : MonoBehaviour
 {
-    RectTransform rect;
+    RectTransform _rectTransform;
+    public Camera mainCamera;
     
     // Start is called before the first frame update
     void Start()
     {
-        rect = GetComponent<RectTransform>();
+        _rectTransform = GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 worldToScreenPoint = Camera.main.WorldToScreenPoint(GameManager.Instance.player.transform.position);
-        rect.position = worldToScreenPoint - new Vector3(0, 130, 0);
+        Vector3 updatedPosition = GameManager.Instance.player.transform.position;
+        _rectTransform.position = mainCamera.WorldToScreenPoint(updatedPosition);
     }
 }
