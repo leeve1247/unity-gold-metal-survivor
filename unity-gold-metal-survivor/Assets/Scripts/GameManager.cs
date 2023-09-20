@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
+    
     public static GameManager Instance; //스태틱으로 선언된 변수는 인스펙터에서 감지되지 않음
     [Header("# Game Control")]
     public float gameTime;
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour
     public int kill;
     public int exp;
     public int[] nextExp = { 1, 2, 4, 5, 6, 7 };
+    
+    public int health = 10;
+    public int maxHealth = 20;
     
     [Header("# Game Object")]
     public PoolManager poolManager;
