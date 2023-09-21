@@ -1,22 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Follow : MonoBehaviour
 {
-    RectTransform _rectTransform;
+    private RectTransform _rect;
     public Camera mainCamera;
-    
-    // Start is called before the first frame update
-    void Start()
+    // public Vector3 myVector3;
+
+    private void Start()
     {
-        _rectTransform = GetComponent<RectTransform>();
+        _rect = GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        Vector3 updatedPosition = GameManager.Instance.player.transform.position;
-        _rectTransform.position = mainCamera.WorldToScreenPoint(updatedPosition);
+        _rect.position = mainCamera.WorldToScreenPoint(GameManager.Instance.player.transform.position + new Vector3(0, -1.0f, 0));
     }
 }
