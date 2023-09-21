@@ -16,13 +16,7 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
-        
-    }
-
-    void Start()
-    {
-        Init();
+        player = GameManager.Instance.player;
     }
 
     private void Update()
@@ -61,23 +55,44 @@ public class Weapon : MonoBehaviour
         // bullet.parent = transform; //불러온 Bullet을 Weapon 자식으로 할당
         bullet.position = transform.position;
         bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
-        bullet.GetComponent<Bullet>().Init(damage,count,dir);
+        bullet.GetComponent<Bullet>().Init(damage,count,dir); // 이친구는 Weapon이 아니라, 생성된 Bullet에서 처리하는게 옳다
     }
 
-    void LevelUp(float damage, int count)
+    public void LevelUp(float damage, int count)
     {
         this.damage = damage;
         this.count += count;
 
         if (id == 0)
             Batch();
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        // Basic Set
+        name = "Weapon " + data.itemId;
+        transform.parent = player.transform; // 뭔가 너저분하군
+        transform.localPosition = Vector3.zero;
+        
+        // Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for (int index = 0; index < GameManager.Instance.poolManager.prefebs.Length; index++)
+        {
+            if (data.projectile == GameManager.Instance.poolManager.prefebs[index])
+            {
+                prefabId = index;
+                break;
+            }
+        }
+        
         switch (id)
         {
-            case 0:
+            case 0: // 삽이라는 건데... 흠............ 이렇게 한다고?
                 speed = -150; // 회전 속도
                 Batch();
                 break;
