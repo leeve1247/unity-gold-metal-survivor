@@ -9,35 +9,56 @@ public class Item : MonoBehaviour
     public Weapon weapon;
     public Gear gear;
 
-    Image icon;
-    private Text textLevel;
+    private Image _icon;
+    private Text _textLevel;
+    private Text _textName;
+    private Text _textDescription;
     
     // Awake is called when the script instance is being loaded.
     private void Awake()
     {
-        icon = GetComponentsInChildren<Image>()[1];
-        icon.sprite = data.itemIcon;
+        _icon = GetComponentsInChildren<Image>()[1];
+        _icon.sprite = data.itemIcon;
 
-        Text[] texts = GetComponentsInChildren<Text>();
-        textLevel = texts[0];
-        
+        Text[] texts = GetComponentsInChildren<Text>(); //계층구조를 따라간다... 다만, Asset 의 위치가 바뀌는 불상사가 생길수도 있으니, 인덱스보다는 음. Dictionary를 따라가고 싶다.
+        _textLevel = texts[0];
+        _textName = texts[1];
+        _textDescription = texts[2];
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
     }
 
-    private void LateUpdate()
+    private void OnEnable()
     {
-        textLevel.text = "Lv." + (level + 1);
+        _textLevel.text = "Lv." + (level + 1);
+
+        switch (data.itemType)
+        {
+            case ItemData.ItemType.Melee:
+                _textDescription.text = string.Format(data.itemDesc, data.damages[level]* 100, data.counts[level]);
+                break;
+            case ItemData.ItemType.Range:
+                _textDescription.text = string.Format(data.itemDesc, data.damages[level]* 100, data.counts[level]);
+                break;
+            case ItemData.ItemType.Shoe:
+                _textDescription.text = string.Format(data.itemDesc, data.damages[level] * 100);
+                break;
+            case ItemData.ItemType.Heal:
+                _textDescription.text = string.Format(data.itemDesc);
+                break;
+            default:
+                break;
+        }
     }
 
     public void OnClick()
@@ -50,6 +71,17 @@ public class Item : MonoBehaviour
                     GameObject newWeapon = new GameObject();
                     weapon = newWeapon.AddComponent<Weapon>();
                     weapon.Init(data);
+                }
+                else
+                {   // 레벨 2 부터 할당인데.. 이게 왔다갔다 하는 구먼. 아키텍처가 심히 Complex 하여 관리하기 매우 골룸함
+                    float nextDamage = data.baseDamage;
+                    int nextCount = 0;
+                    
+                    nextDamage += data.baseDamage * data.damages[level];
+                    nextCount += data.counts[level];
+
+                    weapon.LevelUp(nextDamage, nextCount);
+                    Debug.Log(weapon.damage);
                 }
                 level++;
                 break;
@@ -70,7 +102,6 @@ public class Item : MonoBehaviour
 
                     weapon.LevelUp(nextDamage, nextCount);
                     // Debug.Log(weapon.damage);
-                    
                 }
                 level++;
                 break;

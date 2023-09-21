@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public Vector2 inputVec;
     public float speed;
     public Scanner scanner;
+
+    public Hand[] hands;
+    
     Rigidbody2D _rigidbody2D;
     SpriteRenderer _spriteRenderer;
     Animator _anim;
@@ -20,6 +23,7 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
+        hands = GetComponentsInChildren<Hand>(true); //비활성화 상태의 게임 오브젝트의 컴포넌트도 가져오겠다는 뜻
     }
 
     // Update is called once per frame

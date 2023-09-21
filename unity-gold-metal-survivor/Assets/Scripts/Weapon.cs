@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using OpenCover.Framework.Model;
+using System.Linq;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -100,6 +98,28 @@ public class Weapon : MonoBehaviour
                 speed = 0.3f; // 연사 속도
                 break;
         }
+        
+        // Hand Set
+        // Debug.Log(data.itemType);
+
+        Hand hand = null; 
+        //근접무기일 경우
+        switch (data.itemType)
+        {
+            case ItemData.ItemType.Melee:
+                hand = player.hands.FirstOrDefault(item => item.name == "HandRight");
+                break;
+            case ItemData.ItemType.Range:
+                hand = player.hands.FirstOrDefault(item => item.name == "HandLeft");
+                break;
+            default:
+                break;
+        }
+        if (hand == null)
+            return;
+        hand.spriter.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+        
     }
     
     void Batch() // 생성 무기를 배치하는 함수 호출
