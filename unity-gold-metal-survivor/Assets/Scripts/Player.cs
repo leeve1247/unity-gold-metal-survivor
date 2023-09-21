@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -26,6 +25,8 @@ public class Player : MonoBehaviour
         hands = GetComponentsInChildren<Hand>(true); //비활성화 상태의 게임 오브젝트의 컴포넌트도 가져오겠다는 뜻
     }
 
+    
+
     // Update is called once per frame
     // void Update()
     // {
@@ -36,6 +37,8 @@ public class Player : MonoBehaviour
     // FixedUpdate is called independent to Frame rate.
     private void FixedUpdate()
     {
+        if (!GameManager.Instance.isLive)
+            return;
         // // 1. Force
         // _rigidbody2D.AddForce(inputVec);
         //
@@ -58,6 +61,24 @@ public class Player : MonoBehaviour
         if (inputVec.x != 0)
         {
             _spriteRenderer.flipX = inputVec.x < 0;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if(!GameManager.Instance.isLive)
+            return;
+
+        GameManager.Instance.health -= Time.deltaTime * 10; // 시간단위로 데미지가 들어가는 건 좀 너무한데
+        if (GameManager.Instance.health < 0)
+        {
+            for (int index = 2; index < transform.childCount; index++)
+            {
+                transform.GetChild(index).gameObject.SetActive(false);
+            }
+            
+            _anim.SetTrigger("Dead");
+            GameManager.Instance.GameOver();
         }
     }
 }

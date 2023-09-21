@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,15 +15,16 @@ public class GameManager : MonoBehaviour
     public int Playerlevel;
     public int kill;
     public int exp;
-    public int[] nextExp = { 1, 2, 4, 5, 6, 7 };
+    public int[] nextExp = { 1, 2, 4, 5, 60000, 700000 };
     
-    public int health = 10;
-    public int maxHealth = 20;
+    public float health = 10;
+    public float maxHealth = 20;
     
     [Header("# Game Object")]
     public PoolManager poolManager;
     public Player player;
     public LevelUp uiLevelUp;
+    public GameObject uiResult; //게임 결과 UI 오브젝트를 저장할 변수 선언 및 초기화
 
     void Awake()
     {
@@ -38,6 +38,25 @@ public class GameManager : MonoBehaviour
         // 임시 스크립트 (첫 번째 캐릭터 기본 무기 지급)
         uiLevelUp.Select(0);
         isLive = true;
+    }
+    
+    public void GameRetry()
+    {
+        SceneManager.LoadScene("Scenes/SampleScene");
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+
+    IEnumerator GameOverRoutine()
+    {
+        isLive = false;
+        yield return new WaitForSeconds(0.5f);
+        
+        uiResult.SetActive(true);
+        Stop();
     }
     
     // Update is called once per frame
@@ -61,6 +80,7 @@ public class GameManager : MonoBehaviour
     public void GetExp()
     {
         exp++;
+        // Debug.Log(exp);
         if (exp == nextExp[Playerlevel])
         {
             Playerlevel += 1;
@@ -68,6 +88,9 @@ public class GameManager : MonoBehaviour
             exp = 0;
             uiLevelUp.Show();
         }
+
+        // Debug.Log(Playerlevel);
+        // Debug.Log($"으에에에ㅔ엥 ㄱ{nextExp[Playerlevel]}");
     }
 
     public void Stop()

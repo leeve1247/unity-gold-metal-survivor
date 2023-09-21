@@ -81,7 +81,7 @@ public class Item : MonoBehaviour
                     nextCount += data.counts[level];
 
                     weapon.LevelUp(nextDamage, nextCount);
-                    Debug.Log(weapon.damage);
+                    // Debug.Log(weapon.damage);
                 }
                 level++;
                 break;

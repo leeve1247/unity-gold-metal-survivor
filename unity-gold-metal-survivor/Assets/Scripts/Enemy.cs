@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.Processors;
-using Random = UnityEngine.Random;
+
 
 public class Enemey : MonoBehaviour
 {

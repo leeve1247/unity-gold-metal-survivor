@@ -22,6 +22,8 @@ public class Spawner : MonoBehaviour
     float _timer; //Update 용 변수
     void Update()
     {
+        if (!GameManager.Instance.isLive)
+            return;
         _timer += Time.deltaTime;
 
         // if (_timer > (_level == 0 ? 0.5f : 0.2f))
